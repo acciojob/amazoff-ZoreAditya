@@ -101,8 +101,21 @@ public class OrderRepository {
     public void deleteOrder(String orderId){
         // your code here
         // delete order by ID
-        orderMap.remove(orderId);
-        orderToPartnerMap.remove(orderId);
+
+            if(orderToPartnerMap.containsKey(orderId)) {
+
+                String partnerId = orderToPartnerMap.get(orderId);
+
+                partnerToOrderMap.get(partnerId).remove(orderId);
+
+                DeliveryPartner partner = partnerMap.get(partnerId);
+                partner.setNumberOfOrders(partner.getNumberOfOrders()-1);
+
+                orderToPartnerMap.remove(orderId);
+            }
+
+            orderMap.remove(orderId);
+
     }
 
     public Integer findCountOfUnassignedOrders(){
@@ -153,7 +166,7 @@ public class OrderRepository {
         }
         int hh=max/60;
         int mm=max%60;
-        return hh+":"+mm;
+        return String.format("%02d:%02d", hh, mm);
 
     }
 }

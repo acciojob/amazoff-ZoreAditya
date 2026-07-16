@@ -26,4 +26,14 @@ public class Order {
     }
 
     public int getDeliveryTime() {return deliveryTime;}
+
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDeliveryTime(String deliveryTime) {
+        String[] str = deliveryTime.split(":");
+        this.deliveryTime = Integer.parseInt(str[0]) * 60 + Integer.parseInt(str[1]);
+    }
 }
