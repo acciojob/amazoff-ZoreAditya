@@ -55,13 +55,13 @@ public class OrderRepository {
     }
 
     public Integer findOrderCountByPartnerId(String partnerId){
-        return partnerMap.getOrDefault(partnerId,null).getNumberOfOrders();
-        // your code here
+        DeliveryPartner partner = partnerMap.get(partnerId);
+        return partner == null ? 0 : partner.getNumberOfOrders();
     }
 
     public List<String> findOrdersByPartnerId(String partnerId){
         // your code here
-        HashSet<String> list=partnerToOrderMap.getOrDefault(partnerId,null);
+        HashSet<String> list = partnerToOrderMap.getOrDefault(partnerId, new HashSet<>());
         List<String> ans=new ArrayList<>();
         for(String string:list){
             ans.add(string);
@@ -119,6 +119,9 @@ public class OrderRepository {
     public Integer findOrdersLeftAfterGivenTimeByPartnerId(String timeString, String partnerId){
         // your code here
         HashSet<String> hashSet=partnerToOrderMap.get(partnerId);
+        if (hashSet == null) {
+            return 0;
+        }
         String str[]=timeString.split(":");
         int hh=Integer.parseInt(str[0]);
         int mm=Integer.parseInt(str[1]);
@@ -139,6 +142,9 @@ public class OrderRepository {
         // your code here
         // code should return string in format HH:MM
         HashSet<String> hashSet=partnerToOrderMap.get(partnerId);
+        if (hashSet == null || hashSet.isEmpty()) {
+            return "00:00";
+        }
         int max=Integer.MIN_VALUE;
         for(String orderId:hashSet){
             if(orderMap.get(orderId).getDeliveryTime()>max){
